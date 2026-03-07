@@ -2,13 +2,8 @@
 
 import { motion, useInView } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { SplitText } from "./SplitText";
 
-type Stat = {
-  label: string;
-  value: number;
-  suffix?: string;
-};
+type Stat = { label: string; value: number; suffix?: string; };
 
 const stats: Stat[] = [
   { label: "Revenue Generated", value: 250, suffix: "M+" },
@@ -16,18 +11,18 @@ const stats: Stat[] = [
   { label: "Viral Reach", value: 500, suffix: "M+" },
 ];
 
-function useCountUp(target: number, active: boolean, duration = 1.6) {
+function useCountUp(target: number, active: boolean, duration = 2.5) {
   const [value, setValue] = useState(0);
   useEffect(() => {
     if (!active) return;
     let frame: number;
     const start = performance.now();
     const animate = (time: number) => {
-      const progress = Math.min(1, (time - start) / (duration * 1000));
+      // Use easeOutQuint for smoother deceleration
+      const p = Math.min(1, (time - start) / (duration * 1000));
+      const progress = 1 - Math.pow(1 - p, 5);
       setValue(Math.floor(target * progress));
-      if (progress < 1) {
-        frame = requestAnimationFrame(animate);
-      }
+      if (p < 1) frame = requestAnimationFrame(animate);
     };
     frame = requestAnimationFrame(animate);
     return () => cancelAnimationFrame(frame);
@@ -37,7 +32,7 @@ function useCountUp(target: number, active: boolean, duration = 1.6) {
 
 function StatCard({ stat, delay }: { stat: Stat; delay: number }) {
   const ref = useRef<HTMLDivElement | null>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, amount: 0.5 });
   const value = useCountUp(stat.value, inView);
 
   return (
@@ -46,20 +41,28 @@ function StatCard({ stat, delay }: { stat: Stat; delay: number }) {
       initial={{ opacity: 0, y: 24 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ delay, duration: 0.6, ease: [0.26, 0.9, 0.33, 1] }}
-      className="glass flex flex-1 flex-col gap-3 p-6 shadow-sm"
+      style={{
+        background: '#fff',
+        border: '1px solid rgba(0,0,0,0.06)',
+        borderRadius: 20,
+        boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+        padding: '1.5rem',
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '0.5rem',
+      }}
     >
-      <p className="text-[10px] font-bold uppercase tracking-[0.24em] text-zinc-500">
+      <p style={{ fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.24em', color: '#6b7280', margin: 0 }}>
         {stat.label}
       </p>
-      <div className="flex items-baseline gap-1 font-heading text-4xl font-bold text-black sm:text-5xl">
-        <span>{value}</span>
+      <div style={{ display: 'flex', alignItems: 'baseline', gap: 4 }}>
+        <span className="font-heading" style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 700, color: '#0a0a0a' }}>{value}</span>
         {stat.suffix && (
-          <span className="text-2xl text-lux-gold">
-            {stat.suffix}
-          </span>
+          <span style={{ fontSize: '1.4rem', color: '#c5a059', fontWeight: 700 }}>{stat.suffix}</span>
         )}
       </div>
-      <p className="text-xs leading-relaxed text-zinc-500">
+      <p style={{ fontSize: '0.75rem', lineHeight: 1.5, color: '#6b7280', margin: 0 }}>
         Crafted strategies across performance, brand, and experiential campaigns.
       </p>
     </motion.div>
@@ -68,41 +71,34 @@ function StatCard({ stat, delay }: { stat: Stat; delay: number }) {
 
 export function TrustSection() {
   return (
-    <section
-      aria-label="Social proof"
-      className="relative overflow-hidden bg-lux-bg-secondary/50 py-24 sm:py-32"
-    >
-      {/* Background Glow */}
-      <div className="pointer-events-none absolute -left-24 top-1/2 h-96 w-96 -translate-y-1/2 rounded-full bg-lux-gold/5 blur-[100px]" />
+    <section aria-label="Social proof" style={{ padding: '6rem 0', background: 'rgba(255, 255, 255, 0.4)', position: 'relative', overflow: 'hidden' }}>
+      <div style={{ position: 'absolute', left: -100, top: '50%', transform: 'translateY(-50%)', width: 380, height: 380, borderRadius: '50%', background: 'rgba(197,160,89,0.06)', filter: 'blur(100px)', pointerEvents: 'none' }} />
 
-      <div className="relative mx-auto flex w-[min(1200px,100%-3rem)] flex-col gap-16 lg:flex-row lg:items-end lg:justify-between">
-        <div className="max-w-xl space-y-8">
-          <motion.p
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            className="text-xs font-black uppercase tracking-[0.4em] text-lux-gold-dark"
-          >
-            Proof Of Execution
-          </motion.p>
-          <SplitText
-            text="Measurable Impact Over Empty Promises."
-            className="font-heading text-4xl font-black text-black sm:text-6xl"
-          />
-          <p className="max-w-md text-lg leading-relaxed text-zinc-600 font-medium">
-            We've architected growth for unicorn startups and category leaders. 
-            Our systems turn attention into equity.
-          </p>
-        </div>
-        
-        <div className="grid flex-1 gap-6 sm:grid-cols-3">
-          {stats.map((stat, index) => (
-            <StatCard
-              key={stat.label}
-              stat={stat}
-              delay={0.1 + index * 0.1}
-            />
-          ))}
+      <div style={{ margin: '0 auto', width: 'min(1200px, calc(100% - 3rem))', display: 'flex', flexDirection: 'column', gap: '4rem' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', alignItems: 'flex-end' }}>
+          <div style={{ maxWidth: 520 }}>
+            <motion.p
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              style={{ fontSize: 11, fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.4em', color: '#8a6b1f', marginBottom: 16 }}
+            >
+              Proof Of Execution
+            </motion.p>
+            <h2 className="font-heading" style={{ fontSize: 'clamp(2rem, 4vw, 3.25rem)', fontWeight: 900, color: '#0a0a0a', lineHeight: 1.1, margin: '0 0 1rem' }}>
+              Measurable Impact Over Empty Promises.
+            </h2>
+            <p style={{ maxWidth: 420, fontSize: '1.05rem', lineHeight: 1.7, color: '#52525b', margin: 0 }}>
+              We've architected growth for unicorn startups and category leaders.
+              Our systems turn attention into equity.
+            </p>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
+            {stats.map((stat, index) => (
+              <StatCard key={stat.label} stat={stat} delay={0.1 + index * 0.1} />
+            ))}
+          </div>
         </div>
       </div>
     </section>

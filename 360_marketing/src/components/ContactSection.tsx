@@ -1,235 +1,455 @@
 "use client";
 
-import { useState } from "react";
-import { motion } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
 
-type FormState = "idle" | "submitting" | "success" | "error";
+const T = {
+  bg: "#e8e4db",
+  bgAlt: "#ded8cb",
+  fg: "#0a0a0a",
+  gold: "#c5a059",
+  goldLight: "#D4AF33",
+  goldDark: "#8a6b1f",
+  muted: "#6b7280",
+  mutedLight: "#9ca3af",
+  white: "#ffffff",
+};
 
-const servicesList = [
-  "Product Shoots",
-  "Reels Creation",
-  "Event Videography",
-  "Video Editing",
-  "LinkedIn Management",
-  "Copywriting",
-  "Graphic Design",
-  "Billboard Advertising",
-  "Brand Collaboration",
-  "Outdoor Campaigns",
-  "Business Card Design"
-];
+type FormState = "idle" | "submitting" | "success";
 
-const businessScales = [
-  "Small Business",
-  "Startup",
-  "Medium Business",
-  "Large Brand",
-  "Personal Brand"
-];
+function useInView(threshold = 0.1) {
+  const ref = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      ([e]) => { if (e.isIntersecting) setInView(true); },
+      { threshold }
+    );
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return { ref, inView };
+}
 
-const contactMethods = [
-  "Phone Call",
-  "Email",
-  "WhatsApp"
-];
+/* ─── Label ─── */
+function Label({ children, required }: { children: string; required?: boolean }) {
+  return (
+    <label style={{
+      display: "block",
+      fontFamily: "'Inter', sans-serif",
+      fontSize: "0.6rem",
+      letterSpacing: "0.24em",
+      fontWeight: 700,
+      color: T.fg,
+      marginBottom: "0.55rem",
+      textTransform: "uppercase",
+    }}>
+      {children}
+      {required && <span style={{ color: T.gold, marginLeft: 3 }}>*</span>}
+    </label>
+  );
+}
 
+/* ─── Input ─── */
+function Input({ name, type = "text", placeholder, required }: {
+  name: string; type?: string; placeholder: string; required?: boolean;
+}) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <input
+      name={name} type={type} placeholder={placeholder} required={required}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      style={{
+        display: "block", width: "100%", height: 50,
+        background: focused ? T.white : T.bgAlt,
+        border: `1.5px solid ${focused ? T.gold : "rgba(197,160,89,0.3)"}`,
+        borderRadius: 12,
+        padding: "0 1rem",
+        fontFamily: "'Montserrat', sans-serif",
+        fontSize: "1.02rem",
+        color: T.fg,
+        outline: "none",
+        transition: "border-color 0.25s, background 0.25s",
+      }}
+    />
+  );
+}
+
+/* ─── Textarea ─── */
+function Textarea({ name, placeholder }: { name: string; placeholder: string; }) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <textarea
+      name={name} placeholder={placeholder} rows={4}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
+      style={{
+        display: "block", width: "100%",
+        background: focused ? T.white : T.bgAlt,
+        border: `1.5px solid ${focused ? T.gold : "rgba(197,160,89,0.3)"}`,
+        borderRadius: 12,
+        padding: "0.85rem 1rem",
+        fontFamily: "'Montserrat', sans-serif",
+        fontSize: "1.02rem",
+        color: T.fg,
+        outline: "none",
+        resize: "vertical",
+        transition: "border-color 0.25s, background 0.25s",
+        lineHeight: 1.65,
+        minHeight: 100,
+      }}
+    />
+  );
+}
+
+/* ─── Select ─── */
+function Select({ name, options, placeholder }: {
+  name: string; options: string[]; placeholder: string;
+}) {
+  const [focused, setFocused] = useState(false);
+  return (
+    <div style={{ position: "relative" }}>
+      <select
+        name={name} defaultValue=""
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
+        style={{
+          display: "block", width: "100%", height: 50,
+          background: focused ? T.white : T.bgAlt,
+          border: `1.5px solid ${focused ? T.gold : "rgba(197,160,89,0.3)"}`,
+          borderRadius: 12,
+          padding: "0 2.5rem 0 1rem",
+          fontFamily: "'Montserrat', sans-serif",
+          fontSize: "1.02rem",
+          color: T.fg,
+          outline: "none",
+          appearance: "none",
+          cursor: "pointer",
+          transition: "border-color 0.25s, background 0.25s",
+        }}
+      >
+        <option value="" disabled>{placeholder}</option>
+        {options.map(o => (
+          <option key={o} value={o} style={{ color: T.fg, background: T.white }}>{o}</option>
+        ))}
+      </select>
+      <div style={{ position: "absolute", top: "50%", right: "1rem", transform: "translateY(-50%)", pointerEvents: "none" }}>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M2 4l4 4 4-4" stroke={T.gold} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Service Chip ─── */
+function ServiceChip({ label }: { label: string }) {
+  const [on, setOn] = useState(false);
+  return (
+    <button
+      type="button" onClick={() => setOn(!on)}
+      style={{
+        display: "inline-flex", alignItems: "center", gap: 6,
+        fontFamily: "'Inter', sans-serif",
+        fontSize: "0.63rem", letterSpacing: "0.05em",
+        color: on ? T.white : T.fg,
+        background: on ? T.goldDark : T.bgAlt,
+        border: `1.5px solid ${on ? T.goldDark : "rgba(197,160,89,0.22)"}`,
+        borderRadius: "100px",
+        padding: "7px 14px",
+        cursor: "pointer",
+        fontWeight: on ? 700 : 400,
+        transition: "all 0.22s ease",
+        boxShadow: on ? `0 4px 14px rgba(138,107,31,0.3)` : "none",
+      }}
+    >
+      {on && (
+        <svg width="10" height="10" viewBox="0 0 12 10" fill="none">
+          <path d="M1 5l3.5 3.5L11 1" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      )}
+      {label}
+      <input type="checkbox" name="services" value={label} checked={on} onChange={() => { }} style={{ display: "none" }} />
+    </button>
+  );
+}
+
+/* ─── Radio Option ─── */
+function RadioOption({ name, label, checked, onChange }: {
+  name: string; label: string; checked: boolean; onChange: () => void;
+}) {
+  return (
+    <label onClick={onChange} style={{
+      display: "inline-flex", alignItems: "center", gap: 8,
+      cursor: "pointer",
+      fontFamily: "'Montserrat', sans-serif",
+      fontSize: "1.02rem",
+      color: T.fg,
+      fontWeight: checked ? 600 : 400,
+      transition: "color 0.22s",
+    }}>
+      <div style={{
+        width: 18, height: 18, borderRadius: "50%", flexShrink: 0,
+        border: `1.8px solid ${checked ? T.gold : "rgba(197,160,89,0.3)"}`,
+        display: "flex", alignItems: "center", justifyContent: "center",
+        transition: "border-color 0.22s",
+      }}>
+        {checked && <div style={{ width: 9, height: 9, borderRadius: "50%", background: T.gold }} />}
+      </div>
+      {label}
+      <input type="radio" name={name} value={label} checked={checked} onChange={onChange} style={{ display: "none" }} />
+    </label>
+  );
+}
+
+/* ─── Info Row ─── */
+function InfoRow({ icon, label, value, link }: {
+  icon: React.ReactNode; label: string; value: string; link?: string;
+}) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
+      <div style={{
+        width: 38, height: 38, borderRadius: 10, flexShrink: 0,
+        background: T.bgAlt,
+        border: `1px solid rgba(197,160,89,0.2)`,
+        display: "flex", alignItems: "center", justifyContent: "center",
+      }}>{icon}</div>
+      <div>
+        <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.53rem", letterSpacing: "0.26em", color: T.goldDark, fontWeight: 700, marginBottom: "0.15rem" }}>{label}</p>
+        {link ? (
+          <a href={link} style={{ fontFamily: "'Playfair Display', serif", fontSize: "0.95rem", fontWeight: 700, color: T.fg, textDecoration: "none" }}
+            onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = T.goldLight}
+            onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = T.fg}
+          >{value}</a>
+        ) : (
+          <p style={{ fontFamily: "'Playfair Display', serif", fontSize: "0.95rem", fontWeight: 700, color: T.fg }}>{value}</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ══ MAIN ══ */
 export function ContactSection() {
   const [formState, setFormState] = useState<FormState>("idle");
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [contactMethod, setContactMethod] = useState("");
 
-  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  const heroRef = useInView(0.1);
+  const infoRef = useInView(0.08);
+  const formRef = useInView(0.06);
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     if (formState === "submitting") return;
     setFormState("submitting");
-    setErrorMessage(null);
-
-    // Simulate submission
-    setTimeout(() => {
-      setFormState("success");
-      (event.target as HTMLFormElement).reset();
-    }, 1500);
+    setTimeout(() => setFormState("success"), 1800);
   }
 
   return (
-    <section
-      id="contact"
-      className="section-padding bg-[#fdfcf8]"
-    >
-      <div className="mx-auto grid w-[min(1120px,100%-1.5rem)] gap-16 md:grid-cols-[1fr,1.3fr]">
-        <div className="space-y-8">
-          <div className="space-y-6">
-            <p className="text-xs uppercase tracking-[0.28em] text-lux-gold-dark font-black">
-              Get Started
-            </p>
-            <h2 className="font-heading text-4xl text-black sm:text-6xl font-black">
-              Let's Build Your Brand.
-            </h2>
-            <p className="max-w-md text-sm leading-relaxed text-zinc-600 sm:text-lg">
-              Ready to take the next step? Fill out the form to help us understand your needs,
-              and we'll craft a bespoke marketing strategy for you.
-            </p>
-          </div>
-          <div className="space-y-4 text-sm text-zinc-600 sm:text-base font-medium">
-            <div className="flex items-center gap-4">
-              <span className="h-10 w-10 rounded-full border border-lux-gold/20 flex items-center justify-center text-lux-gold font-bold shadow-sm">✉</span>
-              <p>
-                Email:{" "}
-                <a
-                  href="mailto:hello@360marketing.com"
-                  className="text-lux-gold font-bold underline-offset-4 hover:underline"
-                >
-                  hello@360marketing.com
-                </a>
-              </p>
-            </div>
-            <div className="flex items-center gap-4">
-              <span className="h-10 w-10 rounded-full border border-lux-gold/20 flex items-center justify-center text-lux-gold font-bold shadow-sm">📍</span>
-              <p>Location: Operating across major cities & remotely.</p>
-            </div>
+    <div id="contact" style={{ background: T.bg, overflowX: "hidden" }}>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Montserrat:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@400;700&display=swap');
+        *, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
+        input::placeholder, textarea::placeholder {
+          color: rgba(10,10,10,0.4);
+          font-family: 'Montserrat', sans-serif;
+        }
+        @keyframes pulse  { 0%,100%{opacity:.25} 50%{opacity:.85} }
+        @keyframes float  { 0%,100%{transform:translate(0,0) scale(1)} 50%{transform:translate(16px,-20px) scale(1.04)} }
+        @keyframes spin   { from{transform:rotate(0deg)} to{transform:rotate(360deg)} }
+        @keyframes pop-in { from{opacity:0;transform:scale(0.93) translateY(14px)} to{opacity:1;transform:scale(1) translateY(0)} }
+      `}</style>
+
+      {/* ════════════════════════════════
+          HERO — cream background
+      ════════════════════════════════ */}
+      <section ref={heroRef.ref} style={{
+        position: "relative", zIndex: 1,
+        background: T.bg,
+        padding: "8rem 6vw 5rem",
+        textAlign: "center",
+        overflow: "hidden",
+      }}>
+        <div style={{ position: "absolute", top: "-8%", left: "-4%", width: 360, height: 360, borderRadius: "50%", background: "radial-gradient(circle, rgba(197,160,89,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
+        <div style={{ position: "absolute", bottom: "-5%", right: "-3%", width: 300, height: 300, borderRadius: "50%", background: "radial-gradient(circle, rgba(197,160,89,0.05) 0%, transparent 70%)", pointerEvents: "none" }} />
+
+        <div style={{
+          opacity: heroRef.inView ? 1 : 0,
+          transform: heroRef.inView ? "translateY(0)" : "translateY(24px)",
+          transition: "opacity 0.9s ease, transform 0.9s ease",
+          position: "relative",
+        }}>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.6rem", letterSpacing: "0.44em", color: T.gold, fontWeight: 700, marginBottom: "1.2rem" }}>— GET IN TOUCH —</p>
+          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.8rem,7vw,5.2rem)", fontWeight: 900, color: T.fg, lineHeight: 1.08, marginBottom: "1.3rem", letterSpacing: "-0.025em" }}>
+            Ready to Become<br /><em style={{ color: T.gold, fontStyle: "normal" }}>Inevitable?</em>
+          </h1>
+          <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "1.15rem", color: T.muted, maxWidth: "520px", margin: "0 auto", lineHeight: 1.85, fontStyle: "normal" }}>
+            Tell us about your brand. We'll respond within one business day with a bespoke strategy — not a sales pitch.
+          </p>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", justifyContent: "center", marginTop: "2.2rem" }}>
+            <div style={{ width: 50, height: 1, background: `linear-gradient(to right, transparent, ${T.gold})` }} />
+            <span style={{ color: T.gold, fontSize: "0.75rem", animation: "pulse 2.5s ease-in-out infinite" }}>✦</span>
+            <div style={{ width: 50, height: 1, background: `linear-gradient(to left, transparent, ${T.gold})` }} />
           </div>
         </div>
+      </section>
 
-        <motion.form
-          onSubmit={handleSubmit}
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.6 }}
-          className="bg-white space-y-10 rounded-[32px] p-8 shadow-[0_8px_30px_rgba(0,0,0,0.04)] sm:p-12 border border-black/[0.03]"
-        >
-          <div className="grid gap-8 sm:grid-cols-2">
-            <div className="space-y-2 text-sm">
-              <label className="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-500">
-                Full Name *
-              </label>
-              <input
-                name="name"
-                required
-                className="h-12 w-full border-b border-black/20 bg-transparent text-sm text-black outline-none ring-0 transition focus:border-lux-gold placeholder:text-zinc-400"
-                placeholder="John Doe"
-              />
-            </div>
-            <div className="space-y-2 text-sm">
-              <label className="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-500">
-                Email Address *
-              </label>
-              <input
-                type="email"
-                name="email"
-                required
-                className="h-12 w-full border-b border-black/20 bg-transparent text-sm text-black outline-none ring-0 transition focus:border-lux-gold placeholder:text-zinc-400"
-                placeholder="you@company.com"
-              />
-            </div>
+      {/* ════════════════════════════════
+          CONTACT FORM 
+      ════════════════════════════════ */}
+      <section ref={formRef.ref} style={{
+        position: "relative", zIndex: 1,
+        background: T.bg,
+        padding: "3rem 6vw 7rem",
+        overflow: "hidden",
+      }}>
+        <div style={{ position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)", width: 700, height: 500, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(197,160,89,0.05) 0%, transparent 65%)", pointerEvents: "none" }} />
+
+        <div style={{
+          maxWidth: 700, margin: "0 auto",
+          opacity: formRef.inView ? 1 : 0,
+          transform: formRef.inView ? "translateY(0)" : "translateY(32px)",
+          transition: "opacity 0.8s ease, transform 0.8s ease",
+          position: "relative",
+        }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "3rem" }}>
+            <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, transparent, rgba(197,160,89,0.3))` }} />
+            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.57rem", letterSpacing: "0.3em", color: T.goldDark, fontWeight: 700, whiteSpace: "nowrap" }}>YOUR ENQUIRY</p>
+            <div style={{ flex: 1, height: 1, background: `linear-gradient(to left, transparent, rgba(197,160,89,0.3))` }} />
           </div>
 
-          <div className="space-y-2 text-sm">
-            <label className="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-500">
-              Contact Number *
-            </label>
-            <input
-              name="phone"
-              type="tel"
-              required
-              className="h-12 w-full border-b border-black/20 bg-transparent text-sm text-black outline-none ring-0 transition focus:border-lux-gold placeholder:text-zinc-400"
-              placeholder="+1 (555) 000-0000"
-            />
-          </div>
-
-          <div className="space-y-4 text-sm pt-4 border-t border-black/5">
-            <label className="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-500">
-              Which services do you need?
-            </label>
-            <div className="grid gap-4 sm:grid-cols-2">
-              {servicesList.map(service => (
-                <label key={service} className="flex items-center gap-3 cursor-pointer group">
-                  <div className="relative flex items-center justify-center shrink-0">
-                    <input type="checkbox" name="services" value={service} className="peer sr-only" />
-                    <div className="h-5 w-5 rounded border border-black/20 bg-transparent transition-colors peer-checked:border-lux-gold-dark peer-checked:bg-lux-gold group-hover:border-lux-gold" />
-                    <svg className="absolute w-3 h-3 text-black opacity-0 transition-opacity peer-checked:opacity-100 pointer-events-none" viewBox="0 0 14 10" fill="none">
-                      <path d="M1 5L4.5 8.5L13 1" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                  </div>
-                  <span className="text-sm font-medium text-zinc-600 transition-colors group-hover:text-black">{service}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          <div className="space-y-2 text-sm pt-4 border-t border-black/5">
-            <label className="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-500">
-              Scale of your business or project
-            </label>
-            <select
-              name="businessScale"
-              defaultValue=""
-              className="h-12 w-full border-b border-black/20 bg-transparent text-sm font-medium text-zinc-700 outline-none ring-0 transition focus:border-lux-gold hover:cursor-pointer"
-            >
-              <option value="" disabled>Select scale...</option>
-              {businessScales.map(scale => (
-                <option key={scale} value={scale} className="text-black">{scale}</option>
-              ))}
-            </select>
-          </div>
-
-          <div className="space-y-3 text-sm pt-4 border-t border-black/5">
-            <div className="space-y-1">
-              <label className="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-500">
-                Tell us about your business or project
-              </label>
-              <p className="text-xs text-zinc-400">Include industry, target audience, and marketing challenges.</p>
-            </div>
-            <textarea
-              name="projectDetails"
-              rows={4}
-              className="w-full border-b border-black/20 bg-transparent py-2 text-sm text-black outline-none ring-0 transition focus:border-lux-gold placeholder:text-zinc-400 resize-y"
-              placeholder="Give us a brief overview..."
-            />
-          </div>
-
-          <div className="space-y-4 text-sm pt-4 border-t border-black/5">
-            <label className="text-[10px] font-black uppercase tracking-[0.25em] text-zinc-500">
-              Preferred Contact Method
-            </label>
-            <div className="flex flex-wrap gap-8">
-              {contactMethods.map(method => (
-                <label key={method} className="flex items-center gap-3 cursor-pointer group">
-                  <div className="relative flex items-center justify-center shrink-0">
-                    <input type="radio" name="contactMethod" value={method} className="peer sr-only" required />
-                    <div className="h-[18px] w-[18px] rounded-full border border-black/30 bg-transparent transition-colors peer-checked:border-lux-gold-dark group-hover:border-lux-gold" />
-                    <div className="absolute h-2.5 w-2.5 rounded-full bg-lux-gold-dark opacity-0 transition-opacity peer-checked:opacity-100 pointer-events-none" />
-                  </div>
-                  <span className="text-sm font-medium text-zinc-600 transition-colors group-hover:text-black">{method}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-
-          {formState === "success" && (
-            <div className="rounded-2xl bg-emerald-500/10 p-5 border border-emerald-500/20">
-              <p className="text-sm font-bold text-emerald-700">
-                Thank you! Your information has been received. We'll be in touch soon.
+          {formState === "success" ? (
+            <div style={{
+              background: T.white,
+              border: `1.5px solid rgba(197,160,89,0.2)`,
+              borderRadius: 28,
+              padding: "4rem 2.5rem",
+              textAlign: "center",
+              animation: "pop-in 0.5s ease forwards",
+            }}>
+              <div style={{ width: 80, height: 80, borderRadius: "50%", background: `linear-gradient(135deg, ${T.goldDark}, ${T.goldLight})`, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1.75rem", boxShadow: `0 8px 32px rgba(197,160,89,0.3)` }}>
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5">
+                  <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </div>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.6rem", letterSpacing: "0.32em", color: T.gold, fontWeight: 700, marginBottom: "0.7rem" }}>MESSAGE RECEIVED</p>
+              <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", fontWeight: 900, color: T.fg, marginBottom: "0.9rem", letterSpacing: "-0.02em" }}>
+                We'll Be in Touch <em style={{ color: T.gold, fontStyle: "normal" }}>Soon.</em>
+              </h3>
+              <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "1.05rem", color: T.muted, lineHeight: 1.8, fontStyle: "normal", maxWidth: "360px", margin: "0 auto 2.25rem" }}>
+                Our team will review your brief and respond with a tailored strategy within one business day.
               </p>
+              <button
+                onClick={() => setFormState("idle")}
+                style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.6rem", letterSpacing: "0.22em", fontWeight: 700, color: T.dark, background: T.gold, border: "none", borderRadius: "100px", padding: "0.75rem 2rem", cursor: "pointer", transition: "all 0.25s" }}
+              >SEND ANOTHER ENQUIRY</button>
             </div>
-          )}
-
-          {formState === "error" && errorMessage && (
-            <div className="rounded-2xl bg-rose-500/10 p-5 border border-rose-500/20">
-              <p className="text-sm font-bold text-rose-700">{errorMessage}</p>
-            </div>
-          )}
-
-          <div className="pt-4">
-            <button
-              type="submit"
-              disabled={formState === "submitting"}
-              className="w-full rounded-full bg-black py-5 px-8 text-[11px] font-black uppercase tracking-[0.25em] text-white shadow-xl transition-all hover:bg-lux-gold hover:text-black hover:-translate-y-1 disabled:opacity-50 disabled:hover:translate-y-0"
+          ) : (
+            <form
+              onSubmit={handleSubmit}
+              style={{ display: "flex", flexDirection: "column", gap: "2rem" }}
             >
-              {formState === "submitting" ? "Sending Details..." : "Submit Information"}
-            </button>
-          </div>
-        </motion.form>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
+                <div>
+                  <Label required>Full Name</Label>
+                  <Input name="name" placeholder="Your full name" required />
+                </div>
+                <div>
+                  <Label required>Email Address</Label>
+                  <Input name="email" type="email" placeholder="you@company.com" required />
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
+                <div>
+                  <Label required>Phone / WhatsApp</Label>
+                  <Input name="phone" type="tel" placeholder="+91 98765 43210" required />
+                </div>
+                <div>
+                  <Label>Business Name</Label>
+                  <Input name="business" placeholder="Your brand name" />
+                </div>
+              </div>
+
+              <div>
+                <Label>Services Required</Label>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
+                  {["Product Shoots", "Reels Creation", "Event Videography", "Video Editing", "LinkedIn Management", "Copywriting", "Graphic Design", "Billboard Advertising", "Brand Collaboration", "Business Card Design"].map(s => (
+                    <ServiceChip key={s} label={s} />
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.25rem" }}>
+                <div>
+                  <Label>Business Scale</Label>
+                  <Select name="businessScale" placeholder="Select scale..." options={["Personal Brand", "Small Business", "Startup", "Medium Business", "Large Brand"]} />
+                </div>
+                <div>
+                  <Label>Monthly Budget</Label>
+                  <Select name="budget" placeholder="Select budget..." options={["Under ₹25,000", "₹25,000 – ₹75,000", "₹75,000 – ₹2,00,000", "₹2,00,000+"]} />
+                </div>
+              </div>
+
+              <div>
+                <Label>Tell Us About Your Project</Label>
+                <Textarea name="projectDetails" placeholder="Your industry, target audience, key challenges, and what success looks like..." />
+              </div>
+
+              <div style={{ borderTop: `1px solid rgba(197,160,89,0.3)`, paddingTop: "1.75rem" }}>
+                <Label required>Preferred Contact Method</Label>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "2rem", marginTop: "0.65rem" }}>
+                  {["Phone Call", "WhatsApp", "Email"].map(m => (
+                    <RadioOption key={m} name="contactMethod" label={m} checked={contactMethod === m} onChange={() => setContactMethod(m)} />
+                  ))}
+                </div>
+              </div>
+
+              <div style={{ paddingTop: "0.5rem" }}>
+                <button
+                  type="submit"
+                  disabled={formState === "submitting"}
+                  style={{
+                    width: "100%",
+                    fontFamily: "'Inter', sans-serif",
+                    fontSize: "0.7rem", letterSpacing: "0.24em", fontWeight: 700,
+                    color: T.white,
+                    background: formState === "submitting" ? "rgba(197,160,89,0.5)" : T.gold,
+                    border: "none", borderRadius: "100px",
+                    padding: "1.15rem 2rem",
+                    cursor: formState === "submitting" ? "not-allowed" : "pointer",
+                    boxShadow: `0 6px 28px rgba(197,160,89,0.28)`,
+                    transition: "all 0.3s",
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: "0.65rem",
+                  }}
+                >
+                  {formState === "submitting" ? "Sending Enquiry..." : "Send Enquiry ✦"}
+                </button>
+
+                <p style={{ textAlign: "center", fontFamily: "'Montserrat', sans-serif", fontSize: "0.88rem", color: T.muted, fontStyle: "normal", marginTop: "1rem", fontWeight: 500 }}>
+                  We respond within 1 business day. No spam, ever.
+                </p>
+              </div>
+            </form>
+          )}
+        </div>
+      </section>
+
+      {/* ── FOOTER ── */}
+      <div style={{ padding: "1.4rem 6vw", borderTop: `1px solid rgba(197,160,89,0.12)`, background: T.bgAlt, display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem", position: "relative", zIndex: 1 }}>
+        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.57rem", letterSpacing: "0.22em", color: T.goldDark, fontWeight: 700 }}>© 2025 MARKETSPARK STUDIO</span>
+        <em style={{ fontFamily: "'Playfair Display', serif", fontSize: "0.85rem", color: T.muted, fontStyle: "normal", fontWeight: 500 }}>Where Brands Become Inevitable.</em>
+        <div style={{ display: "flex", gap: "0.75rem" }}>
+          {[
+            { href: "https://instagram.com", icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.goldDark} strokeWidth="1.8"><rect x="2" y="2" width="20" height="20" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.5" cy="6.5" r="1.2" fill={T.goldDark} stroke="none" /></svg> },
+            { href: "https://linkedin.com", icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={T.goldDark} strokeWidth="1.8"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z" /><circle cx="4" cy="4" r="2" /></svg> },
+          ].map((s, i) => (
+            <a key={i} href={s.href} target="_blank" rel="noopener noreferrer"
+              style={{ display: "flex", alignItems: "center", justifyContent: "center", width: 32, height: 32, borderRadius: 8, border: `1px solid rgba(197,160,89,0.3)`, transition: "all 0.2s" }}
+            >{s.icon}</a>
+          ))}
+        </div>
       </div>
-    </section>
+    </div>
   );
 }

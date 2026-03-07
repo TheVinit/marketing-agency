@@ -1,6 +1,5 @@
 "use client";
 
-
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
@@ -14,59 +13,108 @@ const navItems = [
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 24);
-    };
+    const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const navBg = scrolled
+    ? "rgba(255,255,255,0.92)"
+    : "rgba(255,255,255,0.5)";
 
   return (
     <motion.header
       initial={{ y: -32, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed inset-x-0 top-0 z-40 flex justify-center"
+      transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
+      style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 40, display: 'flex', justifyContent: 'center' }}
     >
       <div
-        className={`mt-4 flex w-[min(1120px,100%-1.5rem)] items-center justify-between rounded-full border border-black/[0.05] px-6 py-3 backdrop-blur-xl transition-all duration-500 ${scrolled
-          ? "bg-white/90 shadow-2xl shadow-lux-gold/10"
-          : "bg-white/40"
-          }`}
+        style={{
+          marginTop: 16,
+          width: 'min(1120px, calc(100% - 1.5rem))',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          borderRadius: 999,
+          border: '1px solid rgba(0,0,0,0.07)',
+          padding: '10px 20px',
+          backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)',
+          background: navBg,
+          boxShadow: scrolled ? '0 8px 40px rgba(0,0,0,0.08)' : 'none',
+          transition: 'background 0.5s, box-shadow 0.5s',
+        }}
       >
-        <a
-          href="/"
-          className="transition-opacity hover:opacity-80"
+        {/* Logo */}
+        <a href="/" style={{ textDecoration: 'none', opacity: 1, transition: 'opacity 0.2s', display: 'flex', alignItems: 'center' }}
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '0.7'}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
         >
-          <img src="/marketspark_logo1.png" alt="360° Marketing Logo" className="h-8 md:h-10 w-auto object-contain" />
+          <img src="/marketspark_logo1-removebg-preview.png" alt="360° Marketing Logo" style={{ height: 42, width: 'auto', objectFit: 'contain', transform: 'scale(3)', transformOrigin: 'left center' }} />
         </a>
-        <nav className="hidden items-center gap-10 text-[11px] font-bold uppercase tracking-[0.2em] text-zinc-600 md:flex">
+
+        {/* Nav links */}
+        <nav style={{ display: 'flex', alignItems: 'center', gap: 40, listStyle: 'none', margin: 0, padding: 0 }}>
           {navItems.map((item) => (
             <a
               key={item.href}
               href={item.href}
-              className="group relative transition-colors hover:text-lux-gold"
+              className="nav-link"
+              style={{
+                fontSize: 11, fontWeight: 700,
+                textTransform: 'uppercase',
+                letterSpacing: '0.2em',
+                color: '#3f3f3f',
+                textDecoration: 'none',
+                transition: 'color 0.2s',
+              }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = '#c5a059'}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = '#3f3f3f'}
             >
-              <span>{item.label}</span>
-              <span className="absolute inset-x-0 -bottom-1 h-[2px] origin-left scale-x-0 bg-lux-gold transition-transform duration-300 group-hover:scale-x-100" />
+              {item.label}
             </a>
           ))}
         </nav>
+
+        {/* CTA */}
         <a
           href="#contact"
-          className="hidden rounded-full bg-black px-6 py-2.5 text-[10px] font-bold uppercase tracking-[0.2em] text-white shadow-lg transition hover:bg-lux-gold hover:text-black hover:scale-105 md:inline-flex"
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 999,
+            background: '#000',
+            color: '#fff',
+            fontSize: 10,
+            fontWeight: 900,
+            textTransform: 'uppercase',
+            letterSpacing: '0.2em',
+            padding: '10px 22px',
+            textDecoration: 'none',
+            transition: 'background 0.3s, color 0.3s, transform 0.2s',
+            boxShadow: '0 4px 16px rgba(0,0,0,0.2)',
+          }}
+          onMouseEnter={e => {
+            const el = e.currentTarget as HTMLElement;
+            el.style.background = '#c5a059';
+            el.style.color = '#000';
+            el.style.transform = 'scale(1.04)';
+          }}
+          onMouseLeave={e => {
+            const el = e.currentTarget as HTMLElement;
+            el.style.background = '#000';
+            el.style.color = '#fff';
+            el.style.transform = 'scale(1)';
+          }}
         >
-          Start Your Imperium
+          Start Your Brand Journey
         </a>
-        <button
-          className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-xs text-zinc-200 md:hidden"
-          aria-label="Open navigation"
-        >
-          <span className="block h-[1px] w-4 bg-zinc-300" />
-        </button>
       </div>
     </motion.header>
   );
