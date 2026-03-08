@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 export function Footer() {
   return (
-    <footer style={{ position: 'relative', overflow: 'hidden', background: '#000', paddingTop: '6rem', paddingBottom: '3rem', color: '#fff' }}>
+    <footer style={{ position: 'relative', overflow: 'hidden', background: '#000', paddingTop: '6rem', paddingBottom: '3rem', color: '#fff', zIndex: 2, isolation: 'isolate' }}>
       {/* Background Glows */}
       <div style={{ position: 'absolute', bottom: 0, right: 0, width: 500, height: 500, transform: 'translate(25%, 25%)', borderRadius: '50%', background: 'rgba(197,160,89,0.08)', filter: 'blur(120px)', pointerEvents: 'none' }} />
       <div style={{ position: 'absolute', top: 0, left: 0, width: 300, height: 300, transform: 'translate(-50%, -50%)', borderRadius: '50%', background: 'rgba(197,160,89,0.05)', filter: 'blur(100px)', pointerEvents: 'none' }} />

@@ -65,7 +65,7 @@ function Input({ name, type = "text", placeholder, required }: {
         border: `1.5px solid ${focused ? T.gold : "rgba(197,160,89,0.3)"}`,
         borderRadius: 12,
         padding: "0 1rem",
-        fontFamily: "'Montserrat', sans-serif",
+        fontFamily: "'Inter', sans-serif",
         fontSize: "1.02rem",
         color: T.fg,
         outline: "none",
@@ -89,7 +89,7 @@ function Textarea({ name, placeholder }: { name: string; placeholder: string; })
         border: `1.5px solid ${focused ? T.gold : "rgba(197,160,89,0.3)"}`,
         borderRadius: 12,
         padding: "0.85rem 1rem",
-        fontFamily: "'Montserrat', sans-serif",
+        fontFamily: "'Inter', sans-serif",
         fontSize: "1.02rem",
         color: T.fg,
         outline: "none",
@@ -119,7 +119,7 @@ function Select({ name, options, placeholder }: {
           border: `1.5px solid ${focused ? T.gold : "rgba(197,160,89,0.3)"}`,
           borderRadius: 12,
           padding: "0 2.5rem 0 1rem",
-          fontFamily: "'Montserrat', sans-serif",
+          fontFamily: "'Inter', sans-serif",
           fontSize: "1.02rem",
           color: T.fg,
           outline: "none",
@@ -182,7 +182,7 @@ function RadioOption({ name, label, checked, onChange }: {
     <label onClick={onChange} style={{
       display: "inline-flex", alignItems: "center", gap: 8,
       cursor: "pointer",
-      fontFamily: "'Montserrat', sans-serif",
+      fontFamily: "'Inter', sans-serif",
       fontSize: "1.02rem",
       color: T.fg,
       fontWeight: checked ? 600 : 400,
@@ -266,7 +266,7 @@ export function ContactSection() {
       <section ref={heroRef.ref} style={{
         position: "relative", zIndex: 1,
         background: T.bg,
-        padding: "8rem 6vw 5rem",
+        padding: "4rem 4vw 1rem",
         textAlign: "center",
         overflow: "hidden",
       }}>
@@ -283,7 +283,7 @@ export function ContactSection() {
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.8rem,7vw,5.2rem)", fontWeight: 900, color: T.fg, lineHeight: 1.08, marginBottom: "1.3rem", letterSpacing: "-0.025em" }}>
             Ready to Become<br /><em style={{ color: T.gold, fontStyle: "normal" }}>Inevitable?</em>
           </h1>
-          <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "1.15rem", color: T.muted, maxWidth: "520px", margin: "0 auto", lineHeight: 1.85, fontStyle: "normal" }}>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "1.15rem", color: T.muted, maxWidth: "520px", margin: "0 auto", lineHeight: 1.85, fontStyle: "normal" }}>
             Tell us about your brand. We'll respond within one business day with a bespoke strategy — not a sales pitch.
           </p>
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", justifyContent: "center", marginTop: "2.2rem" }}>
@@ -300,7 +300,7 @@ export function ContactSection() {
       <section ref={formRef.ref} style={{
         position: "relative", zIndex: 1,
         background: T.bg,
-        padding: "3rem 6vw 7rem",
+        padding: "3rem 6vw 4rem",
         overflow: "hidden",
       }}>
         <div style={{ position: "absolute", top: "20%", left: "50%", transform: "translateX(-50%)", width: 700, height: 500, borderRadius: "50%", background: "radial-gradient(ellipse, rgba(197,160,89,0.05) 0%, transparent 65%)", pointerEvents: "none" }} />
@@ -314,7 +314,7 @@ export function ContactSection() {
         }}>
           <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "3rem" }}>
             <div style={{ flex: 1, height: 1, background: `linear-gradient(to right, transparent, rgba(197,160,89,0.3))` }} />
-            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.57rem", letterSpacing: "0.3em", color: T.goldDark, fontWeight: 700, whiteSpace: "nowrap" }}>YOUR ENQUIRY</p>
+            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "12px", letterSpacing: "0.3em", color: T.goldDark, fontWeight: 700, whiteSpace: "nowrap" }}>YOUR ENQUIRY</p>
             <div style={{ flex: 1, height: 1, background: `linear-gradient(to left, transparent, rgba(197,160,89,0.3))` }} />
           </div>
 
@@ -336,7 +336,7 @@ export function ContactSection() {
               <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: "2rem", fontWeight: 900, color: T.fg, marginBottom: "0.9rem", letterSpacing: "-0.02em" }}>
                 We'll Be in Touch <em style={{ color: T.gold, fontStyle: "normal" }}>Soon.</em>
               </h3>
-              <p style={{ fontFamily: "'Montserrat', sans-serif", fontSize: "1.05rem", color: T.muted, lineHeight: 1.8, fontStyle: "normal", maxWidth: "360px", margin: "0 auto 2.25rem" }}>
+              <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "1.05rem", color: T.muted, lineHeight: 1.8, fontStyle: "normal", maxWidth: "360px", margin: "0 auto 2.25rem" }}>
                 Our team will review your brief and respond with a tailored strategy within one business day.
               </p>
               <button
@@ -426,7 +426,7 @@ export function ContactSection() {
                   {formState === "submitting" ? "Sending Enquiry..." : "Send Enquiry ✦"}
                 </button>
 
-                <p style={{ textAlign: "center", fontFamily: "'Montserrat', sans-serif", fontSize: "0.88rem", color: T.muted, fontStyle: "normal", marginTop: "1rem", fontWeight: 500 }}>
+                <p style={{ textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "0.88rem", color: T.muted, fontStyle: "normal", marginTop: "1rem", fontWeight: 500 }}>
                   We respond within 1 business day. No spam, ever.
                 </p>
               </div>

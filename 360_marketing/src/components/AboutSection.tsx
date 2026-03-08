@@ -108,7 +108,7 @@ function TeamCard({ member, index }: { member: typeof team[0]; index: number }) 
           padding: "4px 12px",
         }}>
           <span style={{
-            fontFamily: "'Courier Prime', monospace",
+            fontFamily: "'Inter', sans-serif",
             fontSize: "0.55rem", letterSpacing: "0.18em",
             color: T.goldLight, fontWeight: 700,
           }}>{member.role.toUpperCase()}</span>
@@ -124,7 +124,7 @@ function TeamCard({ member, index }: { member: typeof team[0]; index: number }) 
           letterSpacing: "-0.01em",
         }}>{member.name}</h3>
         <p style={{
-          fontFamily: "'Cormorant Garamond', serif",
+          fontFamily: "'Inter', sans-serif",
           fontSize: "0.97rem", color: T.muted,
           lineHeight: 1.7, fontStyle: "italic",
         }}>{member.bio}</p>
@@ -159,46 +159,7 @@ export function AboutSection() {
       <div style={{ position: "absolute", top: "5%", left: "-6%", width: 380, height: 380, borderRadius: "50%", background: "radial-gradient(circle, rgba(197,160,89,0.08) 0%, transparent 70%)", animation: "float 14s ease-in-out infinite", pointerEvents: "none", zIndex: 0 }} />
       <div style={{ position: "absolute", bottom: "8%", right: "-4%", width: 320, height: 320, borderRadius: "50%", background: "radial-gradient(circle, rgba(197,160,89,0.06) 0%, transparent 70%)", animation: "float 18s ease-in-out infinite reverse", pointerEvents: "none", zIndex: 0 }} />
 
-      {/* ── HERO ── */}
-      <section ref={heroRef.ref} style={{ position: "relative", zIndex: 1, padding: "6rem 6vw 5rem", textAlign: "center" }}>
-        <div style={{
-          opacity: heroRef.inView ? 1 : 0,
-          transform: heroRef.inView ? "translateY(0)" : "translateY(24px)",
-          transition: "opacity 0.9s ease, transform 0.9s ease",
-        }}>
-          <p style={{
-            fontFamily: "'Courier Prime', monospace",
-            fontSize: "0.6rem", letterSpacing: "0.42em",
-            color: T.gold, fontWeight: 700, marginBottom: "1.2rem",
-          }}>— WHO WE ARE —</p>
 
-          <h1 style={{
-            fontFamily: "'Playfair Display', serif",
-            fontSize: "clamp(2.8rem, 7vw, 5rem)",
-            fontWeight: 900, color: T.fg,
-            lineHeight: 1.08, marginBottom: "1.4rem",
-            letterSpacing: "-0.025em",
-          }}>
-            We Don't Run Campaigns.<br />
-            <em style={{ color: T.gold, fontStyle: "italic" }}>We Build Empires.</em>
-          </h1>
-
-          <p style={{
-            fontFamily: "'Cormorant Garamond', serif",
-            fontSize: "1.18rem", color: T.muted,
-            maxWidth: "540px", margin: "0 auto",
-            lineHeight: 1.85, fontStyle: "italic",
-          }}>
-            MarketSpark is a 360° marketing studio that architects demand, manufactures visibility, and engineers brand gravity that makes competition irrelevant.
-          </p>
-
-          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", justifyContent: "center", marginTop: "2.5rem" }}>
-            <div style={{ width: 50, height: 1, background: `linear-gradient(to right, transparent, ${T.gold})` }} />
-            <span style={{ color: T.gold, fontSize: "0.75rem", animation: "pulse 2.5s ease-in-out infinite" }}>✦</span>
-            <div style={{ width: 50, height: 1, background: `linear-gradient(to left, transparent, ${T.gold})` }} />
-          </div>
-        </div>
-      </section>
 
       {/* ── MISSION & VISION ── */}
       <section ref={mvRef.ref} style={{ position: "relative", zIndex: 1, padding: "3rem 6vw 6rem", background: "linear-gradient(to bottom, #ded8cb 0%, #0f1012 100%)" }}>
@@ -213,7 +174,7 @@ export function AboutSection() {
             }}>
               Our Core <em style={{ color: T.gold, fontStyle: "italic" }}>Philosophy</em>
             </h2>
-            <p style={{ color: "rgba(255,255,255,0.7)", fontFamily: "'Cormorant Garamond', serif", fontSize: "1.1rem", fontStyle: "italic" }}>
+            <p style={{ color: "rgba(255,255,255,0.7)", fontFamily: "'Inter', sans-serif", fontSize: "1.1rem", fontStyle: "italic" }}>
               The principles that drive every strategy we architect.
             </p>
           </div>
@@ -265,7 +226,7 @@ export function AboutSection() {
                       fontSize: "1.4rem", color: T.goldLight,
                     }}>{item.icon}</div>
                     <div>
-                      <p style={{ fontFamily: "'Courier Prime', monospace", fontSize: "0.6rem", letterSpacing: "0.35em", color: T.gold, fontWeight: 700 }}>{item.num} / {item.label}</p>
+                      <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.6rem", letterSpacing: "0.35em", color: T.gold, fontWeight: 700 }}>{item.num} / {item.label}</p>
                     </div>
                   </div>
 
@@ -277,7 +238,7 @@ export function AboutSection() {
                   }}>{item.title}</h3>
 
                   <p style={{
-                    fontFamily: "'Cormorant Garamond', serif",
+                    fontFamily: "'Inter', sans-serif",
                     fontSize: "1.1rem", color: "rgba(255,255,255,0.75)",
                     lineHeight: 1.85, fontStyle: "italic",
                   }}>{item.body}</p>
@@ -304,7 +265,7 @@ export function AboutSection() {
             transition: "opacity 0.7s ease, transform 0.7s ease",
             textAlign: "center", marginBottom: "3.5rem",
           }}>
-            <p style={{ fontFamily: "'Courier Prime', monospace", fontSize: "0.58rem", letterSpacing: "0.38em", color: T.gold, fontWeight: 700, marginBottom: "0.65rem" }}>03 / THE TEAM</p>
+            <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.58rem", letterSpacing: "0.38em", color: T.gold, fontWeight: 700, marginBottom: "0.65rem" }}> THE TEAM</p>
             <h2 style={{
               fontFamily: "'Playfair Display', serif",
               fontSize: "clamp(2rem,4vw,3.2rem)", fontWeight: 900,
@@ -330,9 +291,9 @@ export function AboutSection() {
         display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: "1rem",
         position: "relative", zIndex: 1,
       }}>
-        <span style={{ fontFamily: "'Courier Prime', monospace", fontSize: "0.57rem", letterSpacing: "0.22em", color: T.gold, opacity: 0.65, fontWeight: 700 }}>MARKETSPARK STUDIO</span>
+        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.57rem", letterSpacing: "0.22em", color: T.gold, opacity: 0.65, fontWeight: 700 }}>MARKETSPARK STUDIO</span>
         <em style={{ fontFamily: "'Playfair Display', serif", fontSize: "0.85rem", color: T.gold, opacity: 0.7 }}>Where Brands Become Inevitable.</em>
-        <span style={{ fontFamily: "'Courier Prime', monospace", fontSize: "0.57rem", letterSpacing: "0.22em", color: T.gold, opacity: 0.65, fontWeight: 700 }}>PREMIUM 360° STUDIO</span>
+        <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.57rem", letterSpacing: "0.22em", color: T.gold, opacity: 0.65, fontWeight: 700 }}>PREMIUM 360° STUDIO</span>
       </div>
     </div>
   );

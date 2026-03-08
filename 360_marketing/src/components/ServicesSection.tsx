@@ -228,7 +228,7 @@ function ServiceModal({ service, onClose }: { service: Service; onClose: () => v
           <div style={{ position: "absolute", bottom: "1.5rem", left: "2rem", right: "5rem" }}>
             <span style={{
               display: "inline-block",
-              fontFamily: "'Courier Prime', monospace",
+              fontFamily: "'Inter', sans-serif",
               fontSize: "0.58rem", letterSpacing: "0.28em", fontWeight: 700,
               color: T.goldLight,
               background: "rgba(0,0,0,0.45)",
@@ -279,7 +279,7 @@ function ServiceModal({ service, onClose }: { service: Service; onClose: () => v
           </div>
 
           <p style={{
-            fontFamily: "'Cormorant Garamond', serif",
+            fontFamily: "'Inter', sans-serif",
             fontSize: "1rem", color: "#2a2a2a",
             lineHeight: 1.6, fontStyle: "italic",
             marginBottom: "1rem",
@@ -287,7 +287,7 @@ function ServiceModal({ service, onClose }: { service: Service; onClose: () => v
 
           {/* What's included */}
           <p style={{
-            fontFamily: "'Courier Prime', monospace",
+            fontFamily: "'Inter', sans-serif",
             fontSize: "0.55rem", letterSpacing: "0.3em",
             color: T.gold, fontWeight: 700, marginBottom: "0.6rem",
           }}>WHAT'S INCLUDED</p>
@@ -302,7 +302,7 @@ function ServiceModal({ service, onClose }: { service: Service; onClose: () => v
               }}>
                 <span style={{ color: T.gold, fontSize: "0.7rem", flexShrink: 0 }}>✦</span>
                 <span style={{
-                  fontFamily: "'Courier Prime', monospace",
+                  fontFamily: "'Inter', sans-serif",
                   fontSize: "0.72rem", color: T.fg,
                   letterSpacing: "0.03em",
                 }}>{b}</span>
@@ -312,14 +312,16 @@ function ServiceModal({ service, onClose }: { service: Service; onClose: () => v
 
           {/* CTA row */}
           <div style={{ marginTop: "1.2rem", display: "flex", gap: "0.8rem", flexWrap: "wrap" }}>
-            <button style={{
-              fontFamily: "'Courier Prime', monospace",
+            <a href="#contact" onClick={onClose} style={{
+              fontFamily: "'Inter', sans-serif",
               fontSize: "0.6rem", letterSpacing: "0.2em", fontWeight: 700,
               color: T.white, background: T.gold,
               border: "none", borderRadius: "100px",
               padding: "0.65rem 1.5rem", cursor: "pointer",
               boxShadow: `0 4px 20px rgba(197,160,89,0.35)`,
               transition: "transform 0.2s, box-shadow 0.2s",
+              textDecoration: "none",
+              display: "inline-block",
             }}
               onMouseEnter={e => {
                 (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
@@ -329,11 +331,11 @@ function ServiceModal({ service, onClose }: { service: Service; onClose: () => v
                 (e.currentTarget as HTMLElement).style.transform = "none";
                 (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 20px rgba(197,160,89,0.35)`;
               }}
-            >START YOUR BRAND JOURNEY ↗</button>
+            >START YOUR BRAND JOURNEY ↗</a>
             <button
               onClick={onClose}
               style={{
-                fontFamily: "'Courier Prime', monospace",
+                fontFamily: "'Inter', sans-serif",
                 fontSize: "0.6rem", letterSpacing: "0.2em", fontWeight: 700,
                 color: T.muted, background: "transparent",
                 border: `1.5px solid rgba(107,114,128,0.3)`,
@@ -421,7 +423,7 @@ function ServiceCard({ service, index, onOpen }: { service: Service; index: numb
         {/* Tag pill over image */}
         <div style={{ position: "absolute", top: "0.85rem", left: "0.85rem" }}>
           <span style={{
-            fontFamily: "'Courier Prime', monospace",
+            fontFamily: "'Inter', sans-serif",
             fontSize: "0.55rem", letterSpacing: "0.25em", fontWeight: 700,
             color: T.goldLight,
             background: "rgba(0,0,0,0.45)",
@@ -438,7 +440,7 @@ function ServiceCard({ service, index, onOpen }: { service: Service; index: numb
           transition: "opacity 0.3s, bottom 0.3s",
         }}>
           <span style={{
-            fontFamily: "'Courier Prime', monospace",
+            fontFamily: "'Inter', sans-serif",
             fontSize: "0.52rem", letterSpacing: "0.15em",
             color: T.white,
             background: T.gold,
@@ -469,7 +471,7 @@ function ServiceCard({ service, index, onOpen }: { service: Service; index: numb
 
         {/* Desc */}
         <p style={{
-          fontFamily: "'Cormorant Garamond', serif",
+          fontFamily: "'Inter', sans-serif",
           fontSize: "0.97rem", color: T.muted,
           lineHeight: 1.72, fontStyle: "italic",
           flex: 1,
@@ -483,7 +485,7 @@ function ServiceCard({ service, index, onOpen }: { service: Service; index: numb
           paddingTop: "1rem",
         }}>
           <span style={{
-            fontFamily: "'Courier Prime', monospace",
+            fontFamily: "'Inter', sans-serif",
             fontSize: "0.58rem", letterSpacing: "0.18em",
             color: hov ? T.goldDark : T.gold,
             fontWeight: 700,
@@ -553,7 +555,7 @@ function ReelCard({ reel, index }: { reel: typeof viralReels[0]; index: number }
           <div style={{ position: "absolute", top: "1rem", left: "1rem", right: "1rem" }}>
             <div style={{
               display: "inline-block",
-              fontFamily: "'Courier Prime', monospace",
+              fontFamily: "'Inter', sans-serif",
               fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.12em",
               color: T.goldLight,
               background: "rgba(0,0,0,0.65)",
@@ -592,7 +594,7 @@ function ReelCard({ reel, index }: { reel: typeof viralReels[0]; index: number }
             padding: "3rem 1rem 0.9rem",
             background: "linear-gradient(transparent, rgba(0,0,0,0.8))",
           }}>
-            <div style={{ fontFamily: "'Courier Prime', monospace", fontSize: "0.56rem", letterSpacing: "0.2em", color: "rgba(255,255,255,0.6)", marginBottom: "0.15rem" }}>{reel.label}</div>
+            <div style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.56rem", letterSpacing: "0.2em", color: "rgba(255,255,255,0.6)", marginBottom: "0.15rem" }}>{reel.label}</div>
             <div style={{ fontFamily: "'Playfair Display', serif", fontSize: "0.88rem", fontWeight: 700, color: T.white }}>{reel.caption}</div>
             <div style={{ position: "absolute", bottom: "0.8rem", right: "0.85rem", opacity: hov ? 0.9 : 0.4, transition: "opacity 0.3s" }}>
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={T.white} strokeWidth="1.5">
@@ -605,7 +607,7 @@ function ReelCard({ reel, index }: { reel: typeof viralReels[0]; index: number }
 
           <div style={{ position: "absolute", inset: 0, background: "rgba(197,160,89,0.07)", opacity: hov ? 1 : 0, transition: "opacity 0.35s", pointerEvents: "none", borderRadius: "24px" }} />
           <div style={{ position: "absolute", bottom: hov ? "4.5rem" : "3.5rem", left: "50%", transform: "translateX(-50%)", opacity: hov ? 1 : 0, transition: "opacity 0.3s, bottom 0.3s", background: "rgba(0,0,0,0.6)", backdropFilter: "blur(6px)", border: `1px solid rgba(197,160,89,0.45)`, borderRadius: "100px", padding: "5px 14px", whiteSpace: "nowrap", pointerEvents: "none" }}>
-            <span style={{ fontFamily: "'Courier Prime', monospace", fontSize: "0.52rem", letterSpacing: "0.18em", color: T.goldLight }}>VIEW ON INSTAGRAM ↗</span>
+            <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.52rem", letterSpacing: "0.18em", color: T.goldLight }}>VIEW ON INSTAGRAM ↗</span>
           </div>
         </div>
       </a>
@@ -618,7 +620,7 @@ function SectionLabel({ number, label, align = "left" }: { number: string; label
   return (
     <div style={{ display: "flex", alignItems: "center", gap: "1rem", justifyContent: align === "right" ? "flex-end" : "flex-start" }}>
       {align === "right" && <div style={{ width: 48, height: 1, background: `linear-gradient(to left, ${T.gold}, transparent)`, opacity: 0.6 }} />}
-      <span style={{ fontFamily: "'Courier Prime', monospace", fontSize: "0.58rem", letterSpacing: "0.3em", color: T.gold, fontWeight: 700 }}>{number} / {label}</span>
+      <span style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.58rem", letterSpacing: "0.3em", color: T.gold, fontWeight: 700 }}>{number} / {label}</span>
       {align === "left" && <div style={{ width: 48, height: 1, background: `linear-gradient(to right, ${T.gold}, transparent)`, opacity: 0.6 }} />}
     </div>
   );
@@ -669,11 +671,11 @@ export function ServicesSection() {
         </div>
 
         <div style={{ opacity: heroRef.inView ? 1 : 0, transform: heroRef.inView ? "translateY(0)" : "translateY(28px)", transition: "opacity 0.9s ease, transform 0.9s ease", position: "relative" }}>
-          <p style={{ fontFamily: "'Courier Prime', monospace", fontSize: "0.6rem", letterSpacing: "0.38em", color: T.gold, fontWeight: 700, marginBottom: "1.5rem" }}>— OUR OFFERINGS —</p>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.6rem", letterSpacing: "0.38em", color: T.gold, fontWeight: 700, marginBottom: "1.5rem" }}>— OUR OFFERINGS —</p>
           <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(3rem,7vw,5.5rem)", fontWeight: 900, color: T.fg, lineHeight: 1.08, marginBottom: "1.5rem", letterSpacing: "-0.025em" }}>
             Every Service.<br /><em style={{ color: T.gold, fontStyle: "italic" }}>Engineered</em> to Elevate.
           </h1>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.15rem", color: T.muted, maxWidth: "520px", margin: "0 auto 2.5rem", lineHeight: 1.8, fontStyle: "italic" }}>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "1.15rem", color: T.muted, maxWidth: "520px", margin: "0 auto 2.5rem", lineHeight: 1.8, fontStyle: "italic" }}>
             From pixels to billboards — a full-spectrum studio built to make your brand impossible to ignore.
           </p>
           <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", justifyContent: "center" }}>
@@ -690,7 +692,7 @@ export function ServicesSection() {
           {[0, 1].map(gi => (
             <div key={gi} style={{ display: "flex", gap: "3rem", alignItems: "center", paddingRight: "3rem" }}>
               {["DIGITAL", "✦", "PHYSICAL", "✦", "CONTENT", "✦", "BRAND", "✦", "LUXURY", "✦", "GROWTH", "✦", "IMPACT", "✦"].map((t, j) => (
-                <span key={j} style={{ fontFamily: "'Courier Prime', monospace", fontSize: "0.58rem", letterSpacing: "0.3em", color: t === "✦" ? T.gold : T.muted, whiteSpace: "nowrap", opacity: t === "✦" ? 0.8 : 0.5 }}>{t}</span>
+                <span key={j} style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.58rem", letterSpacing: "0.3em", color: t === "✦" ? T.gold : T.muted, whiteSpace: "nowrap", opacity: t === "✦" ? 0.8 : 0.5 }}>{t}</span>
               ))}
             </div>
           ))}
@@ -702,7 +704,7 @@ export function ServicesSection() {
         <div style={{ opacity: digitalRef.inView ? 1 : 0, transform: digitalRef.inView ? "translateX(0)" : "translateX(-24px)", transition: "opacity 0.7s ease, transform 0.7s ease", marginBottom: "1.5rem" }}>
           <SectionLabel number="01" label="DIGITAL" />
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.8rem,3.5vw,2.75rem)", fontWeight: 800, color: T.fg, marginTop: "0.5rem", letterSpacing: "-0.02em" }}>Digital Services</h2>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1rem", color: T.muted, fontStyle: "italic", marginTop: "0.4rem" }}>Click any card to explore the full service →</p>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "1rem", color: T.muted, fontStyle: "italic", marginTop: "0.4rem" }}>Click any card to explore the full service →</p>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px,1fr))", gap: "1.5rem" }}>
           {digitalServices.map((s, i) => <ServiceCard key={s.id} service={s} index={i} onOpen={openModal} />)}
@@ -714,7 +716,7 @@ export function ServicesSection() {
         <div style={{ opacity: physicalRef.inView ? 1 : 0, transform: physicalRef.inView ? "translateX(0)" : "translateX(24px)", transition: "opacity 0.7s ease, transform 0.7s ease", marginBottom: "1.5rem", textAlign: "right" }}>
           <SectionLabel number="02" label="PHYSICAL" align="right" />
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(1.8rem,3.5vw,2.75rem)", fontWeight: 800, color: T.fg, marginTop: "0.5rem", letterSpacing: "-0.02em" }}>Physical Presence</h2>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1rem", color: T.muted, fontStyle: "italic", marginTop: "0.4rem" }}>Click any card to explore the full service →</p>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "1rem", color: T.muted, fontStyle: "italic", marginTop: "0.4rem" }}>Click any card to explore the full service →</p>
         </div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px,1fr))", gap: "1.5rem" }}>
           {physicalServices.map((s, i) => <ServiceCard key={s.id} service={s} index={i} onOpen={openModal} />)}
@@ -726,11 +728,11 @@ export function ServicesSection() {
         <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", fontFamily: "'Playfair Display', serif", fontSize: "clamp(8rem,22vw,22rem)", fontWeight: 900, color: "rgba(197,160,89,0.05)", whiteSpace: "nowrap", pointerEvents: "none", userSelect: "none", letterSpacing: "-0.05em", lineHeight: 1 }}>VIRAL</div>
 
         <div style={{ opacity: viralsRef.inView ? 1 : 0, transform: viralsRef.inView ? "translateY(0)" : "translateY(24px)", transition: "opacity 0.8s ease, transform 0.8s ease", textAlign: "center", marginBottom: "2.5rem", position: "relative" }}>
-          <p style={{ fontFamily: "'Courier Prime', monospace", fontSize: "0.6rem", letterSpacing: "0.38em", color: T.gold, fontWeight: 700, marginBottom: "0.9rem" }}>— PROOF OF WORK —</p>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.6rem", letterSpacing: "0.38em", color: T.gold, fontWeight: 700, marginBottom: "0.9rem" }}>— PROOF OF WORK —</p>
           <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(2.5rem,5vw,4rem)", fontWeight: 900, color: T.fg, marginBottom: "1rem", letterSpacing: "-0.025em" }}>
             View Our <em style={{ color: T.gold, fontStyle: "italic" }}>Virals</em>
           </h2>
-          <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: "1.1rem", color: T.muted, fontStyle: "italic", maxWidth: "400px", margin: "0 auto", lineHeight: 1.8 }}>
+          <p style={{ fontFamily: "'Inter', sans-serif", fontSize: "1.1rem", color: T.muted, fontStyle: "italic", maxWidth: "400px", margin: "0 auto", lineHeight: 1.8 }}>
             Results speak louder than promises. Watch what we've built for brands that dared to be extraordinary.
           </p>
         </div>
@@ -741,7 +743,7 @@ export function ServicesSection() {
 
         <div style={{ textAlign: "center", opacity: viralsRef.inView ? 1 : 0, transition: "opacity 1s ease 0.7s" }}>
           <a href="https://www.instagram.com" target="_blank" rel="noopener noreferrer"
-            style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem", fontFamily: "'Courier Prime', monospace", fontSize: "0.62rem", letterSpacing: "0.25em", color: T.fg, textDecoration: "none", border: `1.5px solid rgba(197,160,89,0.4)`, borderRadius: "100px", padding: "0.85rem 2rem", background: T.white, boxShadow: `0 2px 16px rgba(197,160,89,0.12)`, transition: "all 0.3s ease", fontWeight: 700 }}
+            style={{ display: "inline-flex", alignItems: "center", gap: "0.6rem", fontFamily: "'Inter', sans-serif", fontSize: "0.62rem", letterSpacing: "0.25em", color: T.fg, textDecoration: "none", border: `1.5px solid rgba(197,160,89,0.4)`, borderRadius: "100px", padding: "0.85rem 2rem", background: T.white, boxShadow: `0 2px 16px rgba(197,160,89,0.12)`, transition: "all 0.3s ease", fontWeight: 700 }}
             onMouseEnter={e => { const el = e.currentTarget as HTMLElement; el.style.background = T.gold; el.style.color = T.white; el.style.borderColor = T.gold; }}
             onMouseLeave={e => { const el = e.currentTarget as HTMLElement; el.style.background = T.white; el.style.color = T.fg; el.style.borderColor = "rgba(197,160,89,0.4)"; }}
           >

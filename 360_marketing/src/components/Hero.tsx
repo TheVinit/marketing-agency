@@ -199,34 +199,38 @@ export function Hero() {
             </a>
             <br />
           </motion.div>
+          <br />
+          <div className="flex items-center justify-center gap-8 flex-wrap">
 
-          {/* Trusted Brands - Separated as a footer to the central module */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.8, duration: 1 }}
-            className="mt-28 sm:mt-36 flex flex-col items-center gap-6 z-30 w-full"
-          >
-            <br /><br />
-            <div className="flex items-center justify-center gap-10 sm:gap-16 flex-wrap">
-              {[
-                { name: 'Accenture', src: 'https://upload.wikimedia.org/wikipedia/commons/c/cd/Accenture.svg' },
-                { name: 'Google', src: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg' },
-                { name: 'Amazon', src: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg' },
-                { name: 'Microsoft', src: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg' }
-              ].map((company) => (
-                <img
-                  key={company.name}
-                  src={company.src}
-                  alt={company.name}
-                  className="h-[36px] sm:h-[48px] object-contain opacity-70 grayscale contrast-200 hover:opacity-100 transition-opacity"
-                />
-              ))}
-            </div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#8a8a8a] mt-2 drop-shadow-sm">
-              Trusted by <span className="text-[#111] font-black">50+ Global Brands</span>
-            </p>
-          </motion.div>
+            {[
+              { name: 'Accenture', src: 'https://upload.wikimedia.org/wikipedia/commons/c/cd/Accenture.svg' },
+              { name: 'Google', src: 'https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg' },
+              { name: 'Amazon', src: 'https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg' },
+              { name: 'Microsoft', src: 'https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg' }
+            ].map((company) => (
+
+              <div key={company.name} className="flex flex-col items-center gap-2">
+
+                <div className="w-16 h-16 flex items-center justify-center rounded-full bg-white shadow-md border border-gray-200 hover:shadow-lg transition">
+
+                  <img
+                    src={company.src}
+                    alt={company.name}
+                    className="h-6 object-contain grayscale hover:grayscale-0 transition"
+                  />
+
+                </div>
+
+
+              </div>
+
+            ))}
+
+          </div>
+          <br />
+          <p className="text-[10px] font-bold uppercase tracking-[0.25em] text-[#8a8a8a] mt-6 text-center">
+            Trusted by <span className="text-[#111] font-black">50+ Global Brands</span>
+          </p>
         </div>
       </div>
 
