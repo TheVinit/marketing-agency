@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import { supabase } from "../lib/supabase";
 
 const T = {
   bg: "#e8e4db",
@@ -143,11 +144,10 @@ function Select({ name, options, placeholder }: {
 }
 
 /* ─── Service Chip ─── */
-function ServiceChip({ label }: { label: string }) {
-  const [on, setOn] = useState(false);
+function ServiceChip({ label, on, toggle }: { label: string; on: boolean; toggle: () => void }) {
   return (
     <button
-      type="button" onClick={() => setOn(!on)}
+      type="button" onClick={toggle}
       style={{
         display: "inline-flex", alignItems: "center", gap: 6,
         fontFamily: "'Inter', sans-serif",
@@ -169,7 +169,6 @@ function ServiceChip({ label }: { label: string }) {
         </svg>
       )}
       {label}
-      <input type="checkbox" name="services" value={label} checked={on} onChange={() => { }} style={{ display: "none" }} />
     </button>
   );
 }
@@ -233,16 +232,91 @@ function InfoRow({ icon, label, value, link }: {
 export function ContactSection() {
   const [formState, setFormState] = useState<FormState>("idle");
   const [contactMethod, setContactMethod] = useState("");
+  const [selectedServices, setSelectedServices] = useState<string[]>([]);
 
   const heroRef = useInView(0.1);
   const infoRef = useInView(0.08);
   const formRef = useInView(0.06);
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  function toggleService(s: string) {
+    setSelectedServices(prev =>
+      prev.includes(s) ? prev.filter(x => x !== s) : [...prev, s]
+    );
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (formState === "submitting") return;
     setFormState("submitting");
-    setTimeout(() => setFormState("success"), 1800);
+
+    const formData = new FormData(e.currentTarget);
+    const enquiryData = {
+      full_name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      phone: formData.get("phone") as string,
+      business_name: formData.get("business") as string,
+      business_scale: formData.get("businessScale") as string,
+      monthly_budget: formData.get("budget") as string,
+      project_details: formData.get("projectDetails") as string,
+      preferred_contact_method: contactMethod,
+      status: 'New'
+    };
+
+    try {
+      // 1. Insert Enquiry
+      const { data: enquiry, error: enquiryError } = await supabase
+        .from('enquiries')
+        .insert([enquiryData])
+        .select()
+        .single();
+
+      if (enquiryError) throw enquiryError;
+
+      // 2. Link Services
+      if (selectedServices.length > 0) {
+        // Fetch service IDs
+        const { data: servicesData, error: servicesError } = await supabase
+          .from('services')
+          .select('id, service_name')
+          .in('service_name', selectedServices);
+
+        if (servicesError) throw servicesError;
+
+        if (servicesData && servicesData.length > 0) {
+          const links = servicesData.map(s => ({
+            enquiry_id: enquiry.id,
+            service_id: s.id
+          }));
+
+          const { error: linkError } = await supabase
+            .from('enquiry_services')
+            .insert(links);
+
+          if (linkError) throw linkError;
+        }
+      }
+
+      // Trigger Email Notification
+      try {
+        await supabase.functions.invoke('send-lead-email', {
+          body: {
+            lead: {
+              ...enquiryData,
+              services: selectedServices
+            }
+          }
+        });
+      } catch (emailErr) {
+        console.error("Email notification failed:", emailErr);
+        // Do not block the user success message if email fail
+      }
+
+      setFormState("success");
+    } catch (err) {
+      console.error('Error submitting enquiry:', err);
+      alert('Something went wrong. Please try again.');
+      setFormState("idle");
+    }
   }
 
   return (
@@ -341,7 +415,7 @@ export function ContactSection() {
               </p>
               <button
                 onClick={() => setFormState("idle")}
-                style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.6rem", letterSpacing: "0.22em", fontWeight: 700, color: T.dark, background: T.gold, border: "none", borderRadius: "100px", padding: "0.75rem 2rem", cursor: "pointer", transition: "all 0.25s" }}
+                style={{ fontFamily: "'Inter', sans-serif", fontSize: "0.6rem", letterSpacing: "0.22em", fontWeight: 700, color: T.fg, background: T.gold, border: "none", borderRadius: "100px", padding: "0.75rem 2rem", cursor: "pointer", transition: "all 0.25s" }}
               >SEND ANOTHER ENQUIRY</button>
             </div>
           ) : (
@@ -375,7 +449,7 @@ export function ContactSection() {
                 <Label>Services Required</Label>
                 <div style={{ display: "flex", flexWrap: "wrap", gap: "0.5rem" }}>
                   {["Product Shoots", "Reels Creation", "Event Videography", "Video Editing", "LinkedIn Management", "Copywriting", "Graphic Design", "Billboard Advertising", "Brand Collaboration", "Business Card Design"].map(s => (
-                    <ServiceChip key={s} label={s} />
+                    <ServiceChip key={s} label={s} on={selectedServices.includes(s)} toggle={() => toggleService(s)} />
                   ))}
                 </div>
               </div>
@@ -410,20 +484,25 @@ export function ContactSection() {
                   type="submit"
                   disabled={formState === "submitting"}
                   style={{
-                    width: "100%",
-                    fontFamily: "'Inter', sans-serif",
-                    fontSize: "0.7rem", letterSpacing: "0.24em", fontWeight: 700,
+                    width: '100%',
+                    padding: '1.25rem',
+                    background: T.gold,
                     color: T.white,
-                    background: formState === "submitting" ? "rgba(197,160,89,0.5)" : T.gold,
-                    border: "none", borderRadius: "100px",
-                    padding: "1.15rem 2rem",
-                    cursor: formState === "submitting" ? "not-allowed" : "pointer",
-                    boxShadow: `0 6px 28px rgba(197,160,89,0.28)`,
-                    transition: "all 0.3s",
-                    display: "flex", alignItems: "center", justifyContent: "center", gap: "0.65rem",
+                    border: 'none',
+                    borderRadius: '12px',
+                    fontSize: '1rem',
+                    fontWeight: 800,
+                    letterSpacing: '0.15em',
+                    textTransform: 'uppercase',
+                    cursor: formState === "submitting" ? 'not-allowed' : 'pointer',
+                    boxShadow: '0 12px 32px rgba(197,160,89,0.3)',
+                    transition: 'all 0.3s',
+                    opacity: formState === "submitting" ? 0.7 : 1
                   }}
+                  onMouseEnter={e => !(formState === "submitting") && (e.currentTarget.style.background = T.goldLight)}
+                  onMouseLeave={e => !(formState === "submitting") && (e.currentTarget.style.background = T.gold)}
                 >
-                  {formState === "submitting" ? "Sending Enquiry..." : "Send Enquiry ✦"}
+                  {formState === "submitting" ? 'Sending Request...' : 'Send Enquiry ✦'}
                 </button>
 
                 <p style={{ textAlign: "center", fontFamily: "'Inter', sans-serif", fontSize: "0.88rem", color: T.muted, fontStyle: "normal", marginTop: "1rem", fontWeight: 500 }}>
