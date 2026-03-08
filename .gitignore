@@ -1,0 +1,19 @@
+# System Files
+.DS_Store
+Thumbs.db
+
+# Dependencies
+**/node_modules/
+node_modules/
+360_marketing/node_modules/
+
+# Environment
+.env
+.env.local
+.env.*
+360_marketing/.env
+
+# Build outputs
+dist/
+build/
+360_marketing/dist/
