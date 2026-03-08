@@ -158,29 +158,30 @@ export default function AdminLeads() {
 
         const headers = ["Full Name", "Email", "Phone", "Business", "Scale", "Budget", "Status", "Services", "Date", "Notes"];
         const rows = filteredLeads.map(l => [
-            l.full_name,
-            l.email,
-            l.phone,
+            l.full_name || "",
+            l.email || "",
+            l.phone || "",
             l.business_name || "Individual",
-            l.business_scale,
-            l.monthly_budget,
-            l.status,
+            l.business_scale || "",
+            l.monthly_budget || "",
+            l.status || "",
             l.services?.join(", ") || "",
-            new Date(l.created_at).toLocaleDateString(),
+            l.created_at ? new Date(l.created_at).toLocaleDateString() : "",
             l.admin_notes || ""
         ]);
 
-        let csvContent = "data:text/csv;charset=utf-8,"
-            + headers.join(",") + "\n"
-            + rows.map(e => e.map(val => `"${val.toString().replace(/"/g, '""')}"`).join(",")).join("\n");
+        const csvContent = headers.join(",") + "\n"
+            + rows.map(e => e.map(val => `"${String(val ?? "").replace(/"/g, '""')}"`).join(",")).join("\n");
 
-        const encodedUri = encodeURI(csvContent);
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
         const link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
+        link.setAttribute("href", url);
         link.setAttribute("download", `MarketSpark_Leads_${new Date().toISOString().split('T')[0]}.csv`);
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        URL.revokeObjectURL(url);
     }
 
     function handleAuth() {
